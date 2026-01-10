@@ -1,0 +1,10 @@
+{
+  "file_types": {
+    "Make": ["Makefile"],
+  },
+  "languages": {
+    "Dockerfile": {
+      "format_on_save": "off",
+    },
+  },
+}
