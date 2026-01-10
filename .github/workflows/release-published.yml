@@ -28,4 +28,3 @@ jobs:
           repository: "${{ github.event.repository.name }}"
           login: "${{ github.actor }}"
           password: "${{ secrets.GITHUB_TOKEN }}"
-          platforms: linux/amd64,linux/arm64
