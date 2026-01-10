@@ -1,4 +1,4 @@
-FROM alpine:3.21 AS base
+FROM alpine:3.23 AS base
 
 ##
 ## Base builder image
@@ -12,7 +12,7 @@ RUN apk --update add --virtual .build-deps build-base automake autoconf libtool 
 ##
 FROM builder AS duo-builder
 
-ARG DUO_VERSION=2.0.4
+ARG DUO_VERSION=2.2.3
 RUN wget https://dl.duosecurity.com/duo_unix-${DUO_VERSION}.tar.gz && \
     mkdir -p src && \
     tar -zxf duo_unix-${DUO_VERSION}.tar.gz --strip-components=1 -C src
@@ -44,7 +44,7 @@ RUN cd src && \
 ##
 FROM builder AS openssh-portable-builder
 
-ARG OPENSSH_VERSION=V_9_9_P2
+ARG OPENSSH_VERSION=V_10_2_P1
 RUN git clone --branch ${OPENSSH_VERSION} --single-branch https://github.com/openssh/openssh-portable src
 
 COPY patches/ /patches/
