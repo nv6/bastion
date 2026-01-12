@@ -117,7 +117,9 @@ ENV DUO_IKEY="" \
     DUO_HOST="" \
     DUO_FAILMODE="secure" \
     DUO_AUTOPUSH="yes" \
-    DUO_PROMPTS="1"
+    DUO_VERIFIED_PUSH="no" \
+    DUO_PROMPTS="1" \
+    DUO_HTTPS_TIMEOUT="0"
 
 ## Enforcer
 ENV ENFORCER_ENABLED="true" \

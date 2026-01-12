@@ -19,8 +19,16 @@ if [ "${MFA_PROVIDER}" == "duo" ]; then
     exit 1;
   fi
 
+  if [[ "$DUO_AUTOPUSH" == "yes" && "$DUO_VERIFIED_PUSH" == "yes" ]]; then
+      echo "DUO_AUTOPUSH and DUO_VERIFIED_PUSH are mutually exclusive, both cannot be enabled!"
+      exit 1;
+  fi
+
+  if (( "$DUO_HTTPS_TIMEOUT" < 0 )); then
+    echo "WARNING: DUO_HTTPS_TIMEOUT cannot be negative, setting to 0"
+    export DUO_HTTPS_TIMEOUT=0
+  fi
+
   envsubst < /etc/pam_duo.conf.env > /etc/pam_duo.conf
   chmod 600 /etc/pam_duo.conf
 fi
-
-
