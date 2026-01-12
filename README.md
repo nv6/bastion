@@ -122,7 +122,7 @@ $ make test
 
 [Duo](https://duo.com/pricing) is a enterprise MFA provider that is very affordable. A free tier is available, and is sufficient for this application. Duo is the default MFA method for the bastion image (`MFA_PROVIDER=duo`).
 
-The foolowing configuration options are available. See [Duo Unix documentation](https://duo.com/docs/duounix#duo-configuration-options) for further explanation. In particular, note some default values below may vary from Duo's defaults.
+The following configuration options are available. See [Duo Unix documentation](https://duo.com/docs/duounix#duo-configuration-options) for further explanation. In particular, note some default values below may vary from Duo's defaults.
 
 | ENV                 |      Description                                      |  Default |
 |---------------------|:------------------------------------------------------|:--------:|
