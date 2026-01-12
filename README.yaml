@@ -29,7 +29,7 @@ badges:
     url: "https://github.com/nv6/bastion/commits"
   - name: "Latest image"
     image: "https://ghcr-badge.egpl.dev/nv6/bastion/latest_tag?color=%2344cc11&ignore=sha*&label=latest+image&trim="
-    url: ""
+    url: "https://github.com/nv6/bastion/pkgs/container/bastion"
   - name: "Image size"
     image: "https://ghcr-badge.egpl.dev/nv6/bastion/size?color=%2344cc11&tag=2&label=image+size&trim="
     url: "https://github.com/nv6/bastion/pkgs/container/bastion"

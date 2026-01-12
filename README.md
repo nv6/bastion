@@ -4,7 +4,7 @@
 <a href="https://cpco.io/homepage"><img src="https://github.com/nv6/bastion/blob/main/.github/banner.png?raw=true" alt="Project Banner"/></a><br/>
 
 
-<p align="right"><a href="https://github.com/nv6/bastion/releases/latest"><img src="https://img.shields.io/github/release/cloudposse/bastion.svg" alt="Latest Release"/></a>
+<p align="right"><a href="https://github.com/nv6/bastion/releases/latest"><img src="https://img.shields.io/github/release/nv6/bastion.svg" alt="Latest Release"/></a><a href="https://github.com/nv6/bastion/actions/workflows/release-published.yml"><img src="https://github.com/nv6/bastion/actions/workflows/release-published.yml/badge.svg" alt="Latest release build status"/></a><a href="https://github.com/nv6/bastion/commits"><img src="https://img.shields.io/github/commits-since/nv6/bastion/latest" alt="Commits since latest release"/></a><a href="https://github.com/nv6/bastion/pkgs/container/bastion"><img src="https://ghcr-badge.egpl.dev/nv6/bastion/latest_tag?color=%2344cc11&ignore=sha*&label=latest+image&trim=" alt="Latest image"/></a><a href="https://github.com/nv6/bastion/pkgs/container/bastion"><img src="https://ghcr-badge.egpl.dev/nv6/bastion/size?color=%2344cc11&tag=2&label=image+size&trim=" alt="Image size"/></a>
 
 </p>
 <!-- markdownlint-restore -->
@@ -30,9 +30,11 @@
 
 -->
 
+
 This is a secure/locked-down bastion implemented as a Docker Container. It uses Alpine Linux as the base image and ships with support for Google Authenticator & DUO MFA support.
 
 It was designed to be used on Kubernetes together with [GitHub Authorized Keys](https://github.com/cloudposse/github-authorized-keys) to provide secure remote access to production clusters.
+
 ### MFA Setup & Usage
 
 Here's a demo of what a user experiences when setting up Google Authenticator for the first time.
@@ -107,7 +109,7 @@ $ make test
 
 ### Configuration
 
-## Recommendations
+#### Recommendations
 
 * Do not allow `root` (or `sudo`) access to this container as doing so would allow remote users to manipulate audit-logs in `/var/log/sudo-io`
 * Use the bastion as a "jump host" for accessing other internal systems rather than installing a lot of unnecessary stuff, which increases the overall attack surface.
@@ -116,37 +118,33 @@ $ make test
 * Bind-mount `/etc/passwd`, `/etc/shadow` and `/etc/group` into the container as *read-only*
 * Bind-mount `/home` into container; the bastion does not manage authorized keys
 
-#### Environment Variables
+#### Duo Configuration
 
-The following tables lists the most relevant environment variables of the `bastion` image and their default values.
+[Duo](https://duo.com/pricing) is a enterprise MFA provider that is very affordable. A free tier is available, and is sufficient for this application. Duo is the default MFA method for the bastion image (`MFA_PROVIDER=duo`).
 
-##### Duo Settings
+The foolowing configuration options are available. See [Duo Unix documentation](https://duo.com/docs/duounix#duo-configuration-options) for further explanation. In particular, note some default values below may vary from Duo's defaults.
 
-Duo is a enterprise MFA provider that is very affordable. Details here: https://duo.com/pricing
+| ENV                 |      Description                                      |  Default |
+|---------------------|:------------------------------------------------------|:--------:|
+| `DUO_IKEY`          |  Duo Integration Key                                  |          |
+| `DUO_SKEY`          |  Duo Secret Key                                       |          |
+| `DUO_HOST`          |  Duo API Hostname                                     |          |
+| `DUO_FAILMODE`      |  How to fail if Duo cannot be reached                 | secure   |
+| `DUO_AUTOPUSH`      |  Automatically send a push notification               | yes      |
+| `DUO_VERIFIED_PUSH` |  Require verification code entry in push notification | no       |
+| `DUO_PROMPTS`       |  How many times to prompt for MFA                     | 1        |
+| `DUO_HTTPS_TIMEOUT` |  Seconds to await HTTPS responses from Duo (0 = off)  | 0        |
 
+> [!tip]
+> At minimum, `DUO_IKEY`, `DUO_SKEY`, and `DUO_HOST` must be provided. To obtain these values, login to your [Duo admin console](https://admin.duosecurity.com/), go to Applications -> Add application -> search "Unix Application" -> Add. The keys and hostname will be displayed under Details.
 
-| ENV               |      Description                                    |  Default |
-|-------------------|:----------------------------------------------------|:--------:|
-| `MFA_PROVIDER`    |  Enable the Duo MFA provider                        | duo      |
-| `DUO_IKEY`        |  Duo Integration Key                                |          |
-| `DUO_SKEY`        |  Duo Secret Key                                     |          |
-| `DUO_HOST`        |  Duo Host Endpoint                                  |          |
-| `DUO_FAILMODE`    |  How to fail if Duo cannot be reached               | secure   |
-| `DUO_AUTOPUSH`    |  Automatically send a push notification             | yes      |
-| `DUO_PROMPTS`     |  How many times to prompt for MFA                   | 1        |
-
-
-##### Google Authenticator Settings
+#### Google Authenticator Configuration
 
 Google Authenticator is a free & open source MFA solution. It's less secure than Duo because tokens are stored on the server under each user account.
 
+To use it, just set `MFA_PROVIDER=google-authenticator`. Configuration is done upon first login.
 
-| ENV               |      Description                                    |  Default              |
-|-------------------|:----------------------------------------------------|:---------------------:|
-| `MFA_PROVIDER`    |  Enable the Google Authenticator provider           | google-authenticator  |
-
-
-##### Enforcer Settings
+#### Enforcer Settings
 
 The enforcer ensures certain conditions are satisfied. Currently, these options are supported.
 
@@ -155,7 +153,7 @@ The enforcer ensures certain conditions are satisfied. Currently, these options 
 | `ENFORCER_ENABLED`            |  Enable general enforcement                                  | `true`   |
 | `ENFORCER_CLEAN_HOME_ENABLED` |  Erase dot files in home directory before starting session   | `true`   |
 
-##### Slack Notifications
+#### Slack Notifications
 
 The enforcer is able to send notifications to a slack channel anytime there is an SSH login.
 
@@ -169,7 +167,7 @@ The enforcer is able to send notifications to a slack channel anytime there is a
 | `SLACK_FATAL_ERRORS`       | Deny logins if slack notification fails             | `true`    |
 
 
-##### SSH Auditor
+#### SSH Auditor
 
 The SSH auditor uses [`sudosh`](https://github.com/cloudposse/sudosh/) to record entire SSH sessions (`stdin`, `stdout`, and `stderr`).
 
