@@ -24,7 +24,7 @@ if [ "${MFA_PROVIDER}" == "duo" ]; then
       exit 1;
   fi
 
-  if [ "$DUO_HTTPS_TIMEOUT" -lt 0 ]; then
+  if (( "$DUO_HTTPS_TIMEOUT" < 0 )); then
     echo "WARNING: DUO_HTTPS_TIMEOUT cannot be negative, setting to 0"
     export DUO_HTTPS_TIMEOUT=0
   fi
